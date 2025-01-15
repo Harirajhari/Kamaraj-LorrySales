@@ -1,0 +1,189 @@
+/* Lorry Detail Section */
+.lorry-detail {
+  padding: 2.5rem;
+  background-color: #f1f1f1; /* Light background for contrast */
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  max-width: 900px;
+  margin: 2rem auto;
+  font-family: 'Arial', sans-serif;
+  transition: transform 0.3s ease;
+}
+
+.lorry-detail:hover {
+  transform: translateY(-5px); /* Subtle lift effect */
+}
+
+.lorry-detail h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.lorry-detail p {
+  font-size: 1rem;
+  color: #555;
+  margin: 0.7rem 0;
+  line-height: 1.6;
+}
+
+.lorry-detail button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 2rem;
+}
+
+.lorry-detail button:hover {
+  background: #0056b3;
+  transform: scale(1.05); /* Slight scale-up effect on hover */
+}
+
+/* Image Gallery */
+.images {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  justify-content: flex-start;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.lorry-detail img {
+  width: 500px; /* Adjust size */
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+/* Full-Screen Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  position: relative;
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  max-width: 95%; /* Allow more width */
+  max-height: 95%; /* Allow more height */
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+.zoomed-image {
+  width: 100%;
+  height: 100%; /* Make the image fill the modal */
+  object-fit: contain; /* Maintain aspect ratio */
+  transition: transform 0.3s ease;
+}
+
+/* Close Button Styling */
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2.5rem;
+  color: #000000;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.close:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Animations for Modal */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideIn {
+  0% { transform: translateY(-30px); }
+  100% { transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lorry-detail {
+    padding: 2rem;
+  }
+
+  .lorry-detail h2 {
+    font-size: 1.7rem;
+  }
+
+  .lorry-detail p {
+    font-size: 0.95rem;
+  }
+
+  .lorry-detail button {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+  }
+
+  .images {
+    gap: 1rem;
+  }
+
+  .lorry-detail img {
+    width: 180px; /* Adjust image size for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .lorry-detail {
+    padding: 1.5rem;
+  }
+
+  .lorry-detail h2 {
+    font-size: 1.5rem;
+  }
+
+  .lorry-detail p {
+    font-size: 0.9rem;
+  }
+
+  .images {
+    gap: 0.8rem;
+  }
+
+  .lorry-detail img {
+    width: 250px; /* Smaller image size for mobile */
+  }
+
+  .close {
+    top: 1rem;
+    right: 0.5rem;
+    font-size: 2rem;
+    color: #020202;
+    cursor: pointer;
+    background: none;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
