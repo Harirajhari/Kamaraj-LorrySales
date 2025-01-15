@@ -6,10 +6,10 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="logo">LorrySales Website</div>
+      <div className="logo">Kamaraj LorrySales</div>
       <div className="owner-info">
-        <p><strong>Owner:</strong> John Doe</p>
-        <p><strong>Contact:</strong> +123 456 7890</p>
+        <p><strong>Owner:</strong> Kamaraj</p>
+        <p><strong>Contact:</strong> 9443262127</p>
       </div>
     </header>
   );
