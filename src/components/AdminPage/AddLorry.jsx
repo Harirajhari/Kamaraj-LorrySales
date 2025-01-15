@@ -19,9 +19,9 @@ const AddLorry = () => {
   });
 
 
-  console.log(  lorryDetails.price);
+  console.log(lorryDetails.price);
   console.log(typeof lorryDetails.price);
-  
+
 
   // Appwrite Client Setup
   const client = new Client();
@@ -31,7 +31,7 @@ const AddLorry = () => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    
+
     // Convert numeric inputs to numbers
     let updatedValue = value;
 
@@ -41,15 +41,15 @@ const AddLorry = () => {
       } else if (name === "mileage") {
         updatedValue = parseFloat(value) || ""; // Convert to float (double)
       } else if (name === "no_of_owner") {
-      updatedValue = parseInt(value, 10) || ""; // Convert to integer
+        updatedValue = parseInt(value, 10) || ""; // Convert to integer
       }
       else if (name === "price") {
         updatedValue = parseInt(value, 10) || ""; // Convert to integer
-      }else {
+      } else {
         updatedValue = value;
       }
     }
-  
+
     setLorryDetails({ ...lorryDetails, [name]: updatedValue });
   };
 
@@ -63,7 +63,7 @@ const AddLorry = () => {
     }
     setLorryDetails({ ...lorryDetails, lorry_images: validFiles });
   };
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,8 +72,8 @@ const AddLorry = () => {
     const uploadedImageUrls = await uploadImages(lorryDetails.lorry_images);
 
     console.log(uploadedImageUrls);
-    
-    
+
+
     // Create the lorry record in Appwrite Database
     try {
       const response = await databases.createDocument(
@@ -112,8 +112,8 @@ const AddLorry = () => {
           file.name, // Custom file name or unique()
           file
         );
-         console.log(file.name);
-         
+        console.log(file.name);
+
         uploadedUrls.push(`https://cloud.appwrite.io/v1/storage/buckets/6783e2a6002aedc40288/files/${fileUpload.$id}/view?project=67810eb3001248099113`);
       } catch (error) {
         console.error(`Error uploading ${file.name}:`, error);
@@ -122,13 +122,13 @@ const AddLorry = () => {
     }
     return uploadedUrls;
   };
-  
+
 
   return (
     <div className="add-lorry-container">
       <h2 className="add-lorry-title">Add New Lorry</h2>
       <form className="add-lorry-form" onSubmit={handleSubmit}>
-      <label htmlFor="lorry_name">Lorry Name</label>
+        <label htmlFor="lorry_name">Lorry Name</label>
         <input
           type="text"
           id="lorry_name"
@@ -253,16 +253,18 @@ const AddLorry = () => {
           placeholder="Enter price"
           required
         />
-        
+
         <label htmlFor="lorry_images">Lorry Images</label>
         <input
           type="file"
           id="lorry_images"
           name="lorry_images"
           multiple
+          accept="image/*" // This allows only image files and opens the gallery by default on mobile
           onChange={handleFileChange}
           required
         />
+
 
         <button type="submit" className="submit-btn">
           Submit
