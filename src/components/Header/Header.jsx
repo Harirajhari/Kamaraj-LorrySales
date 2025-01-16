@@ -8,7 +8,7 @@ const Header = () => {
     <header className="header">
       <div className="logo">NSR Lorry Sales</div>
       <div className="owner-info">
-        <p><strong>Owner:</strong> Kamaraj</p>
+        <p><strong>Broker name:</strong> Kamaraj</p>
         <p><strong>Contact:</strong> 9443262127</p>
       </div>
     </header>
