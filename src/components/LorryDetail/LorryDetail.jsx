@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './LorryDetail.css';
+import AdSenseAd from '../AdSenseAd/AdSenseAd';
 
 const LorryDetail = ({ lorry, onBack }) => {
   const [selectedImage, setSelectedImage] = useState(null); // State for managing selected image
@@ -18,6 +19,13 @@ const LorryDetail = ({ lorry, onBack }) => {
 
   return (
     <div className="lorry-detail">
+
+<AdSenseAd
+        client="ca-pub-XXXXXXXXXXXXXXXX"
+        slot="XXXXXXXXXX"
+      />
+
+      
       <button onClick={onBack} className="back-button">Back</button>
       <h2>{lorry.lorry_name}</h2>
       <p>Lorry Number: {lorry.lorry_number}</p>
@@ -42,6 +50,11 @@ const LorryDetail = ({ lorry, onBack }) => {
         ))}
       </div>
 
+      <AdSenseAd
+        client="ca-pub-XXXXXXXXXXXXXXXX"
+        slot="XXXXXXXXXX"
+      />
+
       {/* Modal to display the full-screen image */}
       {isModalOpen && (
         <div className="modal">
@@ -55,6 +68,14 @@ const LorryDetail = ({ lorry, onBack }) => {
           </div>
         </div>
       )}
+
+
+<AdSenseAd
+        client="ca-pub-XXXXXXXXXXXXXXXX"
+        slot="XXXXXXXXXX"
+      />
+
+
     </div>
   );
 };
