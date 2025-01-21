@@ -20,7 +20,7 @@ const LorryDetail = ({ lorry, onBack }) => {
   return (
     <div className="lorry-detail">'
     '
- <AdSenseAd />
+ {/* <AdSenseAd /> */}
 
       
       <button onClick={onBack} className="back-button">Back</button>
@@ -47,7 +47,7 @@ const LorryDetail = ({ lorry, onBack }) => {
         ))}
       </div>
 
-      <AdSenseAd />
+      {/* <AdSenseAd /> */}
 
       {/* Modal to display the full-screen image */}
       {isModalOpen && (
@@ -63,8 +63,8 @@ const LorryDetail = ({ lorry, onBack }) => {
         </div>
       )}
 
-
-<AdSenseAd />
+{/* 
+<AdSenseAd /> */}
 
 
     </div>
