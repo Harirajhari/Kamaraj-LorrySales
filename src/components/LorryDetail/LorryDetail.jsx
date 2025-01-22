@@ -63,8 +63,8 @@ const LorryDetail = ({ lorry, onBack }) => {
         </div>
       )}
 
-{/* 
-<AdSenseAd /> */}
+
+<AdSenseAd />
 
 
     </div>
