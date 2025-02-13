@@ -221,6 +221,7 @@
   .edit-btn {
     width: 100%;
     padding: 12px;
+    margin: 0;
   }
 
   .back-btn {

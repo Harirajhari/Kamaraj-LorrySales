@@ -10,7 +10,7 @@ const Body = ({ lorries, onCardClick }) => {
             <img src={lorry.lorry_image[0]} alt={lorry.lorry_name} />
             <div className="card-details">
               <h3>{lorry.lorry_name}</h3>
-              <p>{lorry.lorry_number}</p>
+              <h3>{lorry.lorry_number.slice(0, 4) + "*".repeat(lorry.lorry_number.length - 4)}</h3>
               <p>Price: {lorry.price}</p>
             </div>
           </div>

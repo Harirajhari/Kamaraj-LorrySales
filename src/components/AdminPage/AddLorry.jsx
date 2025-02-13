@@ -198,26 +198,31 @@ const AddLorry = () => {
         />
 
         <label htmlFor="lorry_fc">Lorry FC</label>
-        <input
-          type="text"
+        <select
           id="lorry_fc"
           name="lorry_fc"
           value={lorryDetails.lorry_fc}
           onChange={handleChange}
-          placeholder="Enter FC details"
           required
-        />
+        >
+          <option value="">Select FC status</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+
 
         <label htmlFor="lorry_rc">Lorry RC</label>
-        <input
-          type="text"
+        <select
           id="lorry_rc"
           name="lorry_rc"
           value={lorryDetails.lorry_rc}
           onChange={handleChange}
-          placeholder="Enter RC details"
           required
-        />
+        >
+          <option value="">Select RC status</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
 
         <label htmlFor="national_permit">National Permit</label>
         <select

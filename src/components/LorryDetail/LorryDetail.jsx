@@ -25,7 +25,7 @@ const LorryDetail = ({ lorry, onBack }) => {
       
       <button onClick={onBack} className="back-button">Back</button>
       <h2>{lorry.lorry_name}</h2>
-      <p>Lorry Number: {lorry.lorry_number}</p>
+      <p>Lorry Number: {lorry.lorry_number.slice(0, 4) + "*".repeat(lorry.lorry_number.length - 4)}</p>
       <p>Manufacturing Year: {lorry.manufacturing_year}</p>
       <p>Mileage: {lorry.mileage}</p>
       <p>Fuel Type: {lorry.fuel_type}</p>
