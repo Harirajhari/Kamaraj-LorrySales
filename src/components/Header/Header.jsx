@@ -6,7 +6,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="logo">NSR Lorry Sales</div>
+      <div className="logo">NSR Lorry buy</div>
       <div className="owner-info">
         <p><strong>Broker name:</strong> Kamaraj</p>
         <p><strong>Contact:</strong> 9443262127</p>
