@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Client, Databases, Storage } from "appwrite";
-import "./LorryDetailAdmin.css";
+import "./LorryDetailAdmin.css"; // You can keep your custom styles if needed
 
 const LorryDetailAdmin = () => {
   const { lorryId } = useParams();
@@ -11,9 +11,9 @@ const LorryDetailAdmin = () => {
 
   // Appwrite Client Setup
   const client = new Client();
-  client.setEndpoint('https://cloud.appwrite.io/v1').setProject('67810eb3001248099113'); // Your Appwrite endpoint and project ID
+  client.setEndpoint('https://cloud.appwrite.io/v1').setProject('67810eb3001248099113');
   const databases = new Databases(client);
-  const storage = new Storage(client); // Appwrite Storage API
+  const storage = new Storage(client);
 
   useEffect(() => {
     const fetchLorry = async () => {
@@ -26,24 +26,16 @@ const LorryDetailAdmin = () => {
         setLorry(response);
         setEditedLorry(response);
 
-        // Fetch image URLs correctly
         const imageUrls = await Promise.all(
           response.lorry_image.map(async (fileId) => {
             try {
-              console.log(fileId);
-              
-              // Fetch the file using just the fileId, not the full URL
-              // const file = await storage.getFile('6783e2a6002aedc40288', fileId);
-              // console.log(file);
-
-              return fileId; // This will give you the full URL
+              return fileId; // Assume this is a complete URL
             } catch (error) {
-              console.error("Error fetching image from bucket:", error);
-              return null; // In case of an error, return null
+              console.error("Error fetching image:", error);
+              return null;
             }
           })
         );
-
         setLorry((prevLorry) => ({ ...prevLorry, lorry_image: imageUrls }));
       } catch (error) {
         console.error("Error fetching lorry details:", error);
@@ -53,10 +45,7 @@ const LorryDetailAdmin = () => {
     fetchLorry();
   }, [lorryId]);
 
-  // Make sure to check for `lorry_image` before rendering
-  if (!lorry || !lorry.lorry_image) return <div>Loading images...</div>;
-
-  if (!lorry) return <div>Loading...</div>;
+  if (!lorry || !lorry.lorry_image) return <div>Loading...</div>;
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -65,83 +54,48 @@ const LorryDetailAdmin = () => {
 
   const saveChanges = async () => {
     try {
-      // Create a new object with all fields except `lorry_image` for updating
-      const { 
-        lorry_image, // Exclude images since you're not editing them
-        $id,          // Exclude internal fields
-        $createdAt,
-        $updatedAt,
-        $permissions,
-        $databaseId,
-        $collectionId,
-        price,
-        no_of_owner,
-        mileage,
-        manufacturing_year,
-        ...updatedLorry  // Only the editable fields will remain
-      } = editedLorry;
-      
-      // Check and validate the price field
-      if (price && !isNaN(price)) {
-        updatedLorry.price = parseFloat(price); // Convert to float
-      } else if (price) {
-        throw new Error("Invalid price value, must be a valid number");
-      }
-      
-      // Check and validate other fields if necessary
-      if (no_of_owner && !isNaN(no_of_owner)) {
-        updatedLorry.no_of_owner = parseInt(no_of_owner, 10); // Convert to integer
-      } else if (no_of_owner) {
-        throw new Error("Invalid number of owners value, must be a valid number");
-      }
-      
-      if (mileage && !isNaN(mileage)) {
-        updatedLorry.mileage = parseFloat(mileage); // Convert to float
-      } else if (mileage) {
-        throw new Error("Invalid mileage value, must be a valid number");
-      }
-      
-      if (manufacturing_year && !isNaN(manufacturing_year)) {
-        updatedLorry.manufacturing_year = parseInt(manufacturing_year, 10); // Convert to integer
-      } else if (manufacturing_year) {
-        throw new Error("Invalid manufacturing year value, must be a valid number");
+      const { lorry_image, $id, ...updatedLorry } = editedLorry;
+
+      // Data validation
+      if (isNaN(editedLorry.price) || isNaN(editedLorry.no_of_owner) || isNaN(editedLorry.mileage) || isNaN(editedLorry.manufacturing_year)) {
+        throw new Error("Please ensure all numeric fields are valid.");
       }
 
-      
-      console.log("Updating with data:", updatedLorry);
-
-
-      // Update the lorry details in Appwrite
       await databases.updateDocument(
-        '6783dd920033baafee24', // Replace with your database ID
-        '6783ddbb00096a0eca8d', // Replace with your collection ID
-        lorryId, // The document ID
-        updatedLorry // The updated lorry data excluding lorry_image
+        '6783dd920033baafee24',
+        '6783ddbb00096a0eca8d',
+        lorryId,
+        updatedLorry
       );
+
       setLorry((prevLorry) => ({ ...prevLorry, ...updatedLorry }));
       setShowModal(false);
-      console.log("Updated Lorry:", updatedLorry);
+      alert("Lorry details updated successfully!");
     } catch (error) {
       console.error("Error updating lorry:", error);
+      alert(error.message);
     }
   };
 
   return (
-    <div className="LorryDetailPage">
-      <div className="lorry-detail-container">
-        <h1>{lorry.lorry_name}</h1>
-        <div className="lorry-images">
+    <div className="LorryDetailPage max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <div className="lorry-detail-container mb-6">
+        <h1 className="text-3xl font-semibold text-gray-800 mb-4">{lorry.lorry_name}</h1>
+
+        {/* Lorry Images Section */}
+        <div className="lorry-images mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {lorry.lorry_image?.map((image, index) => (
             <img
               key={index}
               src={image}
               alt={`${lorry.lorry_name} - ${index + 1}`}
-              className="lorry-image"
+              className="w-full h-64 object-cover rounded-md shadow-md"
             />
           ))}
         </div>
 
-        <div className="lorry-details">
+        {/* Lorry Details Section */}
+        <div className="lorry-details space-y-4 mb-6">
           <p><strong>Lorry Number:</strong> {lorry.lorry_number}</p>
           <p><strong>Manufacturing Year:</strong> {lorry.manufacturing_year}</p>
           <p><strong>Mileage:</strong> {lorry.mileage}</p>
@@ -151,143 +105,76 @@ const LorryDetailAdmin = () => {
           <p><strong>Lorry RC:</strong> {lorry.lorry_rc}</p>
           <p><strong>National Permit:</strong> {lorry.national_permit}</p>
           <p><strong>Location:</strong> {lorry.location}</p>
-          <p><strong>Price:</strong> {lorry.price}</p>
+          <p><strong>Price:</strong> ₹{lorry.price}</p>
         </div>
-        <button
-          className="edit-btn"
-          onClick={() => setShowModal(true)}
-        >
-          Edit
-        </button>
-        <button
-          className="back-btn"
-          onClick={() => (window.location.href = "/admin")}
-        >
-          Back to Admin Panel
-        </button>
-      </div>
 
-      {showModal && (
-  <div className="modal-overlay">
-    <div className="modal-content">
-      <h2>Edit Lorry Details</h2>
-      <form>
-        <label>
-          Lorry Name:
-          <input
-            type="text"
-            name="lorry_name"
-            value={editedLorry.lorry_name}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Lorry Number:
-          <input
-            type="text"
-            name="lorry_number"
-            value={editedLorry.lorry_number}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Manufacturing Year:
-          <input
-            type="number"
-            name="manufacturing_year"
-            value={editedLorry.manufacturing_year}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Mileage:
-          <input
-            type="text"
-            name="mileage"
-            value={editedLorry.mileage}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Fuel Type:
-          <input
-            type="text"
-            name="fuel_type"
-            value={editedLorry.fuel_type}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Number of Owners:
-          <input
-            type="number"
-            name="no_of_owner"
-            value={editedLorry.no_of_owner}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Lorry FC:
-          <input
-            type="text"
-            name="lorry_fc"
-            value={editedLorry.lorry_fc}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Lorry RC:
-          <input
-            type="text"
-            name="lorry_rc"
-            value={editedLorry.lorry_rc}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          National Permit:
-          <input
-            type="text"
-            name="national_permit"
-            value={editedLorry.national_permit}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Location:
-          <input
-            type="text"
-            name="location"
-            value={editedLorry.location}
-            onChange={handleEditChange}
-          />
-        </label>
-        <label>
-          Price:
-          <input
-            type="text"
-            name="price"
-            value={editedLorry.price}
-            onChange={handleEditChange}
-          />
-        </label>
-        {/* Add more fields as needed */}
-        <div className="modal-actions">
-          <button type="button" onClick={saveChanges}>
-            Save Changes
+        {/* Action Buttons */}
+        <div className="flex gap-4">
+          <button
+            className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600"
+            onClick={() => setShowModal(true)}
+          >
+            Edit
           </button>
           <button
-            type="button"
-            onClick={() => setShowModal(false)}
+            className="bg-gray-300 text-gray-800 px-6 py-2 rounded-md shadow-md hover:bg-gray-400"
+            onClick={() => (window.location.href = "/admin")}
           >
-            Cancel
+            Back to Admin Panel
           </button>
         </div>
-      </form>
-    </div>
-  </div>
-)}
+      </div>
 
+      {/* Edit Modal */}
+      {showModal && (
+        <div className="modal-overlay fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+          <div className="modal-content bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+            <h2 className="text-2xl font-semibold mb-4">Edit Lorry Details</h2>
+            <form>
+              {[
+                { label: "Lorry Name", name: "lorry_name", type: "text" },
+                { label: "Lorry Number", name: "lorry_number", type: "text" },
+                { label: "Manufacturing Year", name: "manufacturing_year", type: "number" },
+                { label: "Mileage", name: "mileage", type: "number" },
+                { label: "Fuel Type", name: "fuel_type", type: "text" },
+                { label: "Number of Owners", name: "no_of_owner", type: "number" },
+                { label: "Lorry FC", name: "lorry_fc", type: "text" },
+                { label: "Lorry RC", name: "lorry_rc", type: "text" },
+                { label: "National Permit", name: "national_permit", type: "text" },
+                { label: "Location", name: "location", type: "text" },
+                { label: "Price", name: "price", type: "number" },
+              ].map((field) => (
+                <div key={field.name} className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">{field.label}</label>
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    value={editedLorry[field.name]}
+                    onChange={handleEditChange}
+                    className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              ))}
+              <div className="flex justify-between gap-4 mt-6">
+                <button
+                  type="button"
+                  className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600"
+                  onClick={saveChanges}
+                >
+                  Save Changes
+                </button>
+                <button
+                  type="button"
+                  className="bg-red-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-red-600"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
