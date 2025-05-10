@@ -12,6 +12,8 @@ import { Client, Databases } from 'appwrite'; // Import Appwrite SDK
 function App() {
   const [selectedLorry, setSelectedLorry] = useState(null);
   const [lorries, setLorries] = useState([]); // State to hold lorries fetched from Appwrite
+  console.log(lorries);
+  
 
   // Appwrite Client Setup
   const client = new Client();
@@ -40,16 +42,8 @@ function App() {
       <div className="app">
         <Header />
         <Routes>
-          <Route
-            path="/"
-            element={
-              selectedLorry ? (
-                <LorryDetail lorry={selectedLorry} onBack={() => setSelectedLorry(null)} />
-              ) : (
-                <Body lorries={lorries} onCardClick={setSelectedLorry} />
-              )
-            }
-          />
+           <Route path="/" element={<Body lorries={lorries} />} />
+  <Route path="/lorry/:id" element={<LorryDetail lorries={lorries} />} />
           <Route path="/admin" element={<AdminPage />} /> {/* Admin route */}
           <Route path="/admin/add-lorry" element={<AddLorry />} />
           <Route path="/lorry-detail/:lorryId" element={<LorryDetailAdmin />} />

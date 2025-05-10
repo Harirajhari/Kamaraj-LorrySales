@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = () => {
   return (
-<header className="bg-[#E8C999] text-[#222222] shadow-md">
+    <header className="bg-[#E8C999] text-[#222222] shadow-md fixed w-full top-0 left-0 z-50">
   <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
     <div className="text-2xl font-bold text-[#8E1616]">
       NSR Lorry Sales

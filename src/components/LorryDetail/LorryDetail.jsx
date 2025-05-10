@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
+import {
+  FacebookShareButton,
+  WhatsappShareButton,
+  TwitterShareButton,
+  FacebookIcon,
+  WhatsappIcon,
+  TwitterIcon,
+} from 'react-share';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const LorryDetail = ({ lorry, onBack }) => {
-  console.log(lorry);
+const LorryDetail = ({ lorries , onBack }) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   
+  const formatPriceWithCommas = (num) => {
+    return num.toLocaleString('en-IN');
+  };
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,15 +30,23 @@ const LorryDetail = ({ lorry, onBack }) => {
     setIsModalOpen(false);
   };
 
+    const lorry = lorries.find((l) => l.$id === id); // Assuming `id` is string
+
+  if (!lorry) return <p className="p-8 text-red-600">Lorry not found.</p>;
+  
+
+  const shareUrl = window.location.href;
+  const shareTitle = `Lorry Name : ${lorry.lorry_name}`;
+
   return (
-    <div className="bg-[#FDF8EE] min-h-screen p-4 sm:p-6 lg:p-10 text-[#222222]">
+<div className="mt-15 bg-[#FDF8EE]  min-h-screen pt-20 p-4 sm:p-6 lg:p-10 text-[#222222] ">
       {/* Back Button */}
-      <button
-        onClick={onBack}
-        className="mb-4 inline-block text-sm text-[#8E1616] font-medium hover:underline"
-      >
-        ← Back to Listings
-      </button>
+       <button
+    onClick={() => navigate(-1)}
+    className="mb-4 inline-block text-sm text-[#8E1616] font-medium hover:underline"
+  >
+    ← Back to Listings
+  </button>
 
       {/* Container */}
       <div className="bg-white rounded-xl shadow-md p-6 sm:p-8">
@@ -33,7 +56,7 @@ const LorryDetail = ({ lorry, onBack }) => {
             {lorry.lorry_name}
           </h2>
           <p className="text-xl font-semibold text-[#222222] mt-2 sm:mt-0">
-            ₹{lorry.price}
+            ₹{formatPriceWithCommas(lorry.price)}
           </p>
         </div>
 
@@ -68,45 +91,62 @@ const LorryDetail = ({ lorry, onBack }) => {
 
         {/* Contact Button */}
         <div className="mt-8">
-  <a
-    href={`https://wa.me/91${lorry.contact_number || '9443262127'}?text=${encodeURIComponent(
-      `Hello, I'm interested in the lorry "${lorry.$id}" listed at ₹${lorry.price}. Could you provide more details?`
-    )}`}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="inline-block bg-[#8E1616] text-white px-6 py-2 rounded-lg hover:bg-[#6e1111] transition"
-  >
-    📞 Contact Seller on WhatsApp
-  </a>
-</div>
+          <a
+            href={`https://wa.me/91${lorry.contact_number || '9443262127'}?text=${encodeURIComponent(
+              `Hello, I'm interested in the lorry "${lorry.$id} : ${lorry.lorry_name}" listed at ₹${lorry.price}. Could you provide more details? --> Direct Link : ${shareUrl}`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[#8E1616] text-white px-6 py-2 rounded-lg hover:bg-[#6e1111] transition"
+          >
+            📞 Contact Seller on WhatsApp
+          </a>
+        </div>
 
+        {/* Share Buttons */}
+        <div className="mt-6">
+          <h4 className="text-[#8E1616] font-semibold mb-2">Share this listing:</h4>
+          <div className="flex space-x-4">
+            <WhatsappShareButton url={shareUrl} title={shareTitle}>
+              <WhatsappIcon size={40} round />
+            </WhatsappShareButton>
+
+            <FacebookShareButton url={shareUrl} quote={shareTitle}>
+              <FacebookIcon size={40} round />
+            </FacebookShareButton>
+
+            <TwitterShareButton url={shareUrl} title={shareTitle}>
+              <TwitterIcon size={40} round />
+            </TwitterShareButton>
+
+          </div>
+        </div>
       </div>
 
       {/* Modal */}
       {isModalOpen && (
-  <div
-    className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
-    onClick={closeModal} // Closes modal on background click
-  >
-    <div
-      className="relative"
-      onClick={(e) => e.stopPropagation()} // Prevent close when clicking image
-    >
-      <button
-        className="absolute -top-4 -right-4 bg-white text-[#8E1616] w-10 h-10 rounded-full shadow-md flex items-center justify-center text-2xl font-bold hover:bg-[#f8f8f8] transition"
-        onClick={closeModal}
-      >
-        &times;
-      </button>
-      <img
-        src={selectedImage}
-        alt="Zoomed"
-        className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg"
-      />
-    </div>
-  </div>
-)}
-
+        <div
+          className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute -top-4 -right-4 bg-white text-[#8E1616] w-10 h-10 rounded-full shadow-md flex items-center justify-center text-2xl font-bold hover:bg-[#f8f8f8] transition"
+              onClick={closeModal}
+            >
+              &times;
+            </button>
+            <img
+              src={selectedImage}
+              alt="Zoomed"
+              className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
